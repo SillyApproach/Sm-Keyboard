@@ -1,0 +1,5 @@
+{
+    "name": "en_gb",
+    "default": "1234567890abcdefghijklmnopqrstuvwxyz-=[];'#\\,./",
+    "shifted": "!\"?$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ_+{}:@~|<>?"
+}
