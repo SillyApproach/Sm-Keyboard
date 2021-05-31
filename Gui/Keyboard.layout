@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <MyGUI type="Layout" version="3.2.0">
     <Widget type="Widget" skin="BackgroundInteractableNarrow" position_real="0.286979 0.324074 0.424479 0.349074" name="KeyboardPanel">
-        <Widget type="TextBox" skin="TextBox" position_real="0.00613497 0.0132626 0.903067 0.0928382" name="Title">
+        <Widget type="TextBox" skin="TextBox" position_real="0.0995086 0.00797872 0.799754 0.0984043" name="Title">
             <Property key="FontName" value="ButtonCaptionSmall"/>
             <Property key="Caption" value="Title"/>
             <Property key="TextAlign" value="Center"/>
@@ -9,7 +9,7 @@
             <Property key="TextShadow" value="true"/>
             <Property key="TextShadowColour" value="0.350877 0.232687 0"/>
         </Widget>
-        <Widget type="EditBox" skin="EditBox_LiftInput" position_real="0.165644 0.198939 0.628221 0.140584" name="Textbox">
+        <Widget type="EditBox" skin="EditBox_LiftInput" position_real="0.165644 0.19 0.628221 0.162234" name="Textbox">
             <Property key="MultiLine" value="false"/>
             <Property key="TextAlign" value="Center"/>
             <Property key="FontName" value="ButtonCaptionSmall"/>
