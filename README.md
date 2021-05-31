@@ -15,8 +15,8 @@ The parameter `bufferedText` contains the input text.
 
 ## Creating a keyboard
 A new keyboard instance needs to be created for every instance of your scripted shape.
-This only needs to happen on the client. In order to create a new keyboard instance, call the `Keyboard.new(scriptedShape)` function.
-The function expects the instance of the scripted shape that uses it as an argument.
+This only needs to happen on the client. In order to create a new keyboard instance, call the `Keyboard.new(scriptedShape, title)` function.
+The function expects the instance of the scripted shape that uses it as an argument and a title to display.
 
 ## Opening the keyboard
 In order to open the keyboard, the `open(initialBuffer: string)` method of the keyboard has to be called.  
@@ -29,7 +29,7 @@ The following snippet shows a small script, that utilises the keyboard.
 MyShape = class()
 
 function MyShape:client_onCreate()
-    self.keyboard = Keyboard.new(self)
+    self.keyboard = Keyboard.new(self, "My keyboard")
 end
 
 function MyShape:client_onInteract(character, lookingAt)

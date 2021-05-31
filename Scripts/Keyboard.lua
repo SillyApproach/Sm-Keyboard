@@ -5,15 +5,13 @@ Keyboard.scriptedShape = nil
 Keyboard.buffer = nil
 Keyboard.shift = nil
 
-function Keyboard.new(scriptedShape)
+function Keyboard.new(scriptedShape, title)
     local instance = Keyboard()
     instance.scriptedShape = scriptedShape
     instance.buffer = ""
     instance.shift = false
     instance.gui = sm.gui.createGuiFromLayout("$MOD_DATA/Gui/Keyboard.layout")
-    instance.layout = {}
-    local keys = "1234567890abcdefghijklmnopqrstuvwxyz-=[];'#\\,./"
-    local layoutConfig = sm.json.open("$MOD_DATA/Gui/KeyboardLayouts/default.json")
+    instance.layout = sm.json.open("$MOD_DATA/Gui/KeyboardLayouts/default.json")
 
     scriptedShape.gui_keyboardButtonCallback = function (shape, buttonName)
         instance:onButtonClick(buttonName)
@@ -23,29 +21,24 @@ function Keyboard.new(scriptedShape)
         instance:close()
     end
 
-    for i = 1, #keys, 1 do
-        local lookup = {
-            default = layoutConfig.default:sub(i, i) == "#" and "##" or layoutConfig.default:sub(i, i),
-            shifted = layoutConfig.shifted:sub(i, i) == "#" and "##" or layoutConfig.shifted:sub(i, i)
-        }
-        local k = keys:sub(i, i) == "'" and "SingleQuote" or keys:sub(i, i)
-        instance.layout[k] = lookup
-        instance.gui:setButtonCallback(k, "gui_keyboardButtonCallback")
+    for i = 1, #instance.layout.keys, 1 do
+        instance.gui:setButtonCallback(tostring(i), "gui_keyboardButtonCallback")
     end
 
     instance.gui:setButtonCallback("Confirm", "gui_keyboardButtonCallback")
     instance.gui:setButtonCallback("Cancel", "gui_keyboardButtonCallback")
+    instance.gui:setButtonCallback("Backspace", "gui_keyboardButtonCallback")
     instance.gui:setButtonCallback("Shift", "gui_keyboardButtonCallback")
     instance.gui:setButtonCallback("Space", "gui_keyboardButtonCallback")
-    instance.gui:setButtonCallback("Backspace", "gui_keyboardButtonCallback")
     instance.gui:setOnCloseCallback("gui_keyboardCloseCallback")
+    instance.gui:setText("Title", title)
 
     return instance
 end
 
 function Keyboard:shiftKeys()
-    for k, v in pairs(self.layout) do
-        self.gui:setText(k, self.shift and v.shifted or v.default)
+    for i = 1, #self.layout.keys, 1 do
+        self.gui:setText(tostring(i), self.shift and self.layout.keys[i][2] or self.layout.keys[i][1])
     end
 
     self.gui:setButtonState("Shift", self.shift)
@@ -72,12 +65,12 @@ function Keyboard:onButtonClick(buttonName)
         self.gui:close()
     elseif buttonName == "Cancel" then
         self.gui:close()
-    elseif buttonName == "Shift" then
-        self.shift = not self.shift
-        self:shiftKeys()
     elseif buttonName == "Backspace" then
         self.buffer = self.buffer:sub(1, -2)
         self.gui:setText("Textbox", self.buffer)
+    elseif buttonName == "Shift" then
+        self.shift = not self.shift
+        self:shiftKeys()
     elseif buttonName == "Space" then
         self.buffer = self.buffer .. " "
         self.gui:setText("Textbox", self.buffer)
@@ -85,9 +78,9 @@ function Keyboard:onButtonClick(buttonName)
         local keyToAppend
 
         if self.shift then
-            keyToAppend = self.layout[buttonName].shifted
+            keyToAppend = self.layout.keys[tonumber(buttonName)][2]
         else
-            keyToAppend = self.layout[buttonName].default
+            keyToAppend = self.layout.keys[tonumber(buttonName)][1]
         end
 
         self.buffer = self.buffer .. keyToAppend
