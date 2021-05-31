@@ -36,12 +36,13 @@ function Keyboard.new(scriptedShape, title)
     return instance
 end
 
-function Keyboard:shiftKeys()
-    for i = 1, #self.layout.keys, 1 do
-        self.gui:setText(tostring(i), self.shift and self.layout.keys[i][2] or self.layout.keys[i][1])
-    end
+function Keyboard:shiftKeys(shift)
+    self.shift = shift
+    self.gui:setButtonState("Shift", shift)
 
-    self.gui:setButtonState("Shift", self.shift)
+    for i = 1, #self.layout.keys, 1 do
+        self.gui:setText(tostring(i), shift and self.layout.keys[i][2] or self.layout.keys[i][1])
+    end
 end
 
 function Keyboard:open(initialBuffer)
@@ -69,8 +70,7 @@ function Keyboard:onButtonClick(buttonName)
         self.buffer = self.buffer:sub(1, -2)
         self.gui:setText("Textbox", self.buffer)
     elseif buttonName == "Shift" then
-        self.shift = not self.shift
-        self:shiftKeys()
+        self:shiftKeys(not self.shift)
     elseif buttonName == "Space" then
         self.buffer = self.buffer .. " "
         self.gui:setText("Textbox", self.buffer)
@@ -79,14 +79,12 @@ function Keyboard:onButtonClick(buttonName)
 
         if self.shift then
             keyToAppend = self.layout.keys[tonumber(buttonName)][2]
+            self:shiftKeys(false)
         else
             keyToAppend = self.layout.keys[tonumber(buttonName)][1]
         end
 
         self.buffer = self.buffer .. keyToAppend
         self.gui:setText("Textbox", self.buffer)
-        self.shift = false
-        self:shiftKeys()
-        self.gui:setButtonState("Shift", false)
     end
 end
