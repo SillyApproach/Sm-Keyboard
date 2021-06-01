@@ -22,6 +22,7 @@ function Keyboard.new(scriptedShape, title)
     end
 
     for i = 1, #instance.layout.keys, 1 do
+        instance.gui:setText(tostring(i), instance.layout.keys[i][1])
         instance.gui:setButtonCallback(tostring(i), "gui_keyboardButtonCallback")
     end
 
