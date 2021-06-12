@@ -66,31 +66,36 @@
             <Property key="FontName" value="ButtonCaptionSmall"/>
             <Property key="TextAlign" value="Center"/>
         </Widget>
-        <Widget type="Button" skin="SecondaryButton" position_real="0.296167 0.805556 0.121951 0.0972222" name="DecimalPoint">
+        <Widget type="Button" skin="SecondaryButton" position_real="0.296167 0.805556 0.121951 0.0972222" name="Negate">
+            <Property key="Caption" value="-"/>
+            <Property key="FontName" value="ButtonCaptionSmall"/>
+            <Property key="TextAlign" value="Center"/>
+        </Widget>
+        <Widget type="Button" skin="SecondaryButton" position_real="0.574913 0.805556 0.121951 0.0972222" name="DecimalPoint">
             <Property key="Caption" value="."/>
             <Property key="FontName" value="ButtonCaptionSmall"/>
             <Property key="TextAlign" value="Center"/>
         </Widget>
-        <Widget type="Button" skin="SecondaryButton" position_real="0.43554 0.347222 0.121951 0.0972222" name="Confirm">
+        <Widget type="Button" skin="SecondaryButton" position_real="0.296167 0.347222 0.121951 0.0972222" name="Confirm">
             <Property key="FontName" value="InterMedium24"/>
             <Property key="TextAlign" value="Center"/>
             <Property key="Caption" value="✓"/>
             <Property key="TextColour" value="0 1 0"/>
         </Widget>
-        <Widget type="Button" skin="SecondaryButton" position_real="0.574913 0.347222 0.121951 0.0972222" name="Cancel">
+        <Widget type="Button" skin="SecondaryButton" position_real="0.43554 0.347222 0.121951 0.0972222" name="Cancel">
             <Property key="Caption" value="✗"/>
             <Property key="FontName" value="InterMedium24"/>
             <Property key="TextAlign" value="Center"/>
             <Property key="TextColour" value="1 0 0"/>
         </Widget>
-        <Widget type="Button" skin="SecondaryButton" position_real="0.574913 0.805556 0.121951 0.0972222" name="Backspace">
-            <Property key="Caption" value="←"/>
-            <Property key="FontName" value="InterMedium24"/>
-            <Property key="TextAlign" value="Center"/>
-        </Widget>
-        <Widget type="Button" skin="SecondaryButton" position_real="0.296167 0.347222 0.121951 0.0972222" name="Clear">
+        <Widget type="Button" skin="SecondaryButton" position_real="0.574913 0.347222 0.121951 0.0972222" name="Clear">
             <Property key="Caption" value="C"/>
             <Property key="FontName" value="ButtonCaptionSmall"/>
+            <Property key="TextAlign" value="Center"/>
+        </Widget>
+        <Widget type="Button" skin="SecondaryButton" position_real="0.714286 0.347222 0.121951 0.0972222" name="Backspace">
+            <Property key="Caption" value="←"/>
+            <Property key="FontName" value="InterMedium24"/>
             <Property key="TextAlign" value="Center"/>
         </Widget>
     </Widget>

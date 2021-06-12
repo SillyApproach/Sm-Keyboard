@@ -4,12 +4,14 @@ Keypad.gui = nil
 Keypad.scriptedShape = nil
 Keypad.buffer = nil
 Keypad.hasDecimalPoint = nil
+Keypad.negative = nil
 
 function Keypad.new(scriptedShape, title)
     local instance = Keypad()
     instance.scriptedShape = scriptedShape
     instance.buffer = ""
     instance.hasDecimalPoint = false
+    instance.negative = false
     instance.gui = sm.gui.createGuiFromLayout("$MOD_DATA/Gui/Keypad.layout")
 
     scriptedShape.gui_keypadButtonCallback = function (shape, buttonName)
@@ -29,6 +31,7 @@ function Keypad.new(scriptedShape, title)
     instance.gui:setButtonCallback("Clear", "gui_keypadButtonCallback")
     instance.gui:setButtonCallback("Backspace", "gui_keypadButtonCallback")
     instance.gui:setButtonCallback("DecimalPoint", "gui_keypadButtonCallback")
+    instance.gui:setButtonCallback("Negate", "gui_keypadButtonCallback")
     instance.gui:setOnCloseCallback("gui_keypadCloseCallback")
     instance.gui:setText("Title", title)
 
@@ -38,7 +41,8 @@ end
 function Keypad:open(initialBuffer)
     if initialBuffer ~= nil and type(initialBuffer) == "number" then
         self.buffer = tostring(initialBuffer)
-        self.hasDecimalPoint = self.buffer:find(".", 1, true) ~= nil
+        self.hasDecimalPoint = initialBuffer % 1 ~= 0
+        self.negative = initialBuffer < 0
     else
         self.buffer = "0"
     end
@@ -63,6 +67,12 @@ function Keypad:onButtonClick(buttonName)
         self.gui:close()
     elseif buttonName == "Cancel" then
         self.gui:close()
+    elseif buttonName == "Negate" then
+        local number = tonumber(self.buffer) or 0
+        number = number * -1
+        self.hasDecimalPoint = number % 1 ~= 0
+        self.negative = number < 0
+        self.buffer = tostring(number)
     elseif buttonName == "Clear" then
         self.buffer = "0"
         self.hasDecimalPoint = false
@@ -82,6 +92,8 @@ function Keypad:onButtonClick(buttonName)
     else
         if self.buffer == "0" then
             self.buffer = buttonName
+        elseif self.buffer == "-0" then
+            self.buffer = "-" .. buttonName
         else
             self.buffer = self.buffer .. buttonName
         end
