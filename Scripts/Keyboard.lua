@@ -47,9 +47,9 @@ function Keyboard:shiftKeys(shift)
 end
 
 function Keyboard:open(initialBuffer)
-    self.gui:open()
     self.buffer = initialBuffer or ""
     self.gui:setText("Textbox", self.buffer)
+    self.gui:open()
 end
 
 function Keyboard:close()
