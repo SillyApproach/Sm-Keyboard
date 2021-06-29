@@ -54,7 +54,10 @@ local function setCallbacks(instance)
     instance.gui:setOnCloseCallback("gui_keypadCloseCallback")
 end
 
-function Keypad.new(scriptedShape, title)
+function Keypad.new(scriptedShape, title, onConfirmCallback, onCloseCallback)
+    assert(onConfirmCallback ~= nil and type(onConfirmCallback) == "function", "Invalid confirm callback passed.")
+    assert(onCloseCallback ~= nil and type(onCloseCallback) == "function", "Invalid close callback passed.")
+
     local instance = Keypad()
     instance.scriptedShape = scriptedShape
     instance.buffer = ""
@@ -62,6 +65,17 @@ function Keypad.new(scriptedShape, title)
     instance.negative = false
     instance.gui = sm.gui.createGuiFromLayout("$MOD_DATA/Gui/Keypad.layout")
     instance.gui:setText("Title", title)
+
+    instance.confirm = function (shape, buttonName)
+        onConfirmCallback(instance.buffer)
+        instance.gui:close()
+    end
+
+    instance.close = function (shape, buttonName)
+        onCloseCallback()
+        instance.buffer = ""
+        instance.hasDecimalPoint = false
+    end
 
     generateCallbacks(scriptedShape, instance)
     setCallbacks(instance)
@@ -82,12 +96,6 @@ function Keypad:open(initialBuffer)
     self.gui:open()
 end
 
-function Keypad:close()
-    self.buffer = ""
-    self.hasDecimalPoint = false
-    self.gui:close()
-end
-
 function Keypad:onButtonClick(buttonName)
     if self.buffer == "0" then
         self.buffer = buttonName
@@ -98,11 +106,6 @@ function Keypad:onButtonClick(buttonName)
     end
 
     self.gui:setText("Textbox", self.buffer)
-end
-
-function Keypad:confirm()
-    self.scriptedShape:keypadNumberChangedCallback(tonumber(self.buffer) or 0)
-    self.gui:close()
 end
 
 function Keypad:cancel()

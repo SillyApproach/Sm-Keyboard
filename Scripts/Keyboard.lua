@@ -49,7 +49,10 @@ local function setCallbacks(instance)
     instance.gui:setOnCloseCallback("gui_keyboardCloseCallback")
 end
 
-function Keyboard.new(scriptedShape, title)
+function Keyboard.new(scriptedShape, title, onConfirmCallback, onCloseCallback)
+    assert(onConfirmCallback ~= nil and type(onConfirmCallback) == "function", "Invalid confirm callback passed.")
+    assert(onCloseCallback ~= nil and type(onCloseCallback) == "function", "Invalid close callback passed.")
+
     local instance = Keyboard()
     instance.scriptedShape = scriptedShape
     instance.buffer = ""
@@ -57,6 +60,16 @@ function Keyboard.new(scriptedShape, title)
     instance.gui = sm.gui.createGuiFromLayout("$MOD_DATA/Gui/Keyboard.layout")
     instance.gui:setText("Title", title)
     instance.layout = sm.json.open("$MOD_DATA/Gui/KeyboardLayouts/default.json")
+
+    instance.confirm = function (shape, buttonName)
+        onConfirmCallback(instance.buffer)
+        instance.gui:close()
+    end
+
+    instance.close = function (shape, buttonName)
+        onCloseCallback()
+        instance.buffer = ""
+    end
 
     generateCallbacks(scriptedShape, instance)
     setCallbacks(instance)
@@ -68,11 +81,6 @@ function Keyboard:open(initialBuffer)
     self.buffer = initialBuffer or ""
     self.gui:setText("Textbox", self.buffer)
     self.gui:open()
-end
-
-function Keyboard:close()
-    self.buffer = ""
-    self.gui:close()
 end
 
 function Keyboard:onButtonClick(buttonName)
@@ -87,11 +95,6 @@ function Keyboard:onButtonClick(buttonName)
 
     self.buffer = self.buffer .. keyToAppend
     self.gui:setText("Textbox", self.buffer)
-end
-
-function Keyboard:confirm()
-    self.scriptedShape:keyboardTextChangedCallback(self.buffer)
-    self.gui:close()
 end
 
 function Keyboard:cancel()
