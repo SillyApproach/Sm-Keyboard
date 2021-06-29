@@ -67,7 +67,7 @@ function Keypad.new(scriptedShape, title, onConfirmCallback, onCloseCallback)
     instance.gui:setText("Title", title)
 
     instance.confirm = function (shape, buttonName)
-        onConfirmCallback(instance.buffer)
+        onConfirmCallback(tonumber(instance.buffer) or 0)
         instance.gui:close()
     end
 
@@ -75,6 +75,7 @@ function Keypad.new(scriptedShape, title, onConfirmCallback, onCloseCallback)
         onCloseCallback()
         instance.buffer = ""
         instance.hasDecimalPoint = false
+        instance.negative = false
     end
 
     generateCallbacks(scriptedShape, instance)
